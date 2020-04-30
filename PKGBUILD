@@ -11,9 +11,9 @@ pkgdesc="Magics is the latest generation of the ECMWF's Meteorological plotting 
 arch=('i686' 'x86_64')
 url="https://software.ecmwf.int/wiki/display/MAGP"
 license=('Apache')
-depends=('qt5-base' 'fftw' 'pango' 'netcdf-cxx-legacy' 'eccodes' 'python' 'libgeotiff')
-optdepends=('libaec' 'odb_api')
-makedepends=('perl-xml-parser' 'gcc-fortran' 'swig' 'cmake' 'boost' 'emos' 'python-jinja')
+depends=(qt5-base pango eccodes python proj)
+optdepends=(libaec odb_api)
+makedepends=(perl-xml-parser gcc-fortran swig cmake boost emos python-jinja)
 source=(http://software.ecmwf.int/wiki/download/attachments/${_attnum}/${Pkgname}-${pkgver}-Source.tar.gz)
 sha256sums=('27d3de71cf41f3d557fd85dabaea2baaab34c4c6422a5b5b15071a6a53387601')
 
