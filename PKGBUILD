@@ -4,9 +4,9 @@
 
 pkgname=magics++
 Pkgname=Magics
-pkgver=4.3.3
+pkgver=4.4.0
 _attnum=3473464
-pkgrel=2
+pkgrel=1
 pkgdesc="Magics is the latest generation of the ECMWF's Meteorological plotting software MAGICS."
 arch=('i686' 'x86_64')
 url="https://software.ecmwf.int/wiki/display/MAGP"
@@ -15,19 +15,16 @@ depends=(qt5-base pango eccodes python proj)
 optdepends=(libaec odb_api)
 makedepends=(perl-xml-parser gcc-fortran swig cmake boost emos python-jinja)
 source=(http://software.ecmwf.int/wiki/download/attachments/${_attnum}/${Pkgname}-${pkgver}-Source.tar.gz)
-sha256sums=('27d3de71cf41f3d557fd85dabaea2baaab34c4c6422a5b5b15071a6a53387601')
+sha256sums=('544058cd334f3e28a16d00ea7811e13cdf282f9c1ebec2ad7868171d925abd24')
 
 build() {
-  cd "$srcdir/${Pkgname}-${pkgver}-Source"
-
   [ -x /usr/bin/odb ] && has_odb=ON || has_odb=OFF
   # force this for now. Metview does not compile
   has_odb=OFF
 
-  mkdir -p build
-  cd build
-
   cmake \
+    -B build \
+    -S "${Pkgname}-${pkgver}-Source" \
     -DCMAKE_LINKER_FLAGS="-pthread" \
     -DCMAKE_SHARED_LINKER_FLAGS="-pthread" \
     -DCMAKE_EXE_LINKER_FLAGS="-pthread" \
@@ -42,13 +39,12 @@ build() {
     -DPYTHON_EXECUTABLE=/usr/bin/python3 \
     ..
 
-  sed -i magics.pc-pkg-config-build.cmake -e '/REPLACE/s/++/\\\\+\\\\+/'
+  # sed -i magics.pc-pkg-config-build.cmake -e '/REPLACE/s/++/\\\\+\\\\+/'
 
-  make
+  make -C build
 }
 
 package() {
-  cd "$srcdir/${Pkgname}-${pkgver}-Source/build"
-  make DESTDIR="$pkgdir" install
+  make -C build DESTDIR="$pkgdir" install
 }
 
