@@ -19,16 +19,13 @@ source=(http://software.ecmwf.int/wiki/download/attachments/${_attnum}/${Pkgname
 md5sums=('570d9888fc794b7c72c0a09fc9210dc3')
 
 build() {
-  cd "$srcdir/${Pkgname}-${pkgver}-Source"
-
   [ -x /usr/bin/odb ] && has_odb=ON || has_odb=OFF
   # force this for now. Metview does not compile
   has_odb=OFF
 
-  mkdir -p build
-  cd build
-
   cmake \
+    -B build \
+    -S "${Pkgname}-${pkgver}-Source" \
     -DCMAKE_LINKER_FLAGS="-pthread" \
     -DCMAKE_SHARED_LINKER_FLAGS="-pthread" \
     -DCMAKE_EXE_LINKER_FLAGS="-pthread" \
@@ -38,12 +35,14 @@ build() {
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_BUILD_TYPE=production \
     -DCMAKE_INSTALL_DATADIR=/usr/share \
-    -DENABLE_METVIEW=1 -DENABLE_QT5=1 -DPYTHON_EXECUTABLE=/usr/bin/python3 ..
-  make || return 1
+    -DENABLE_METVIEW=1 \
+    -DENABLE_QT5=1 \
+    -DPYTHON_EXECUTABLE=/usr/bin/python3
+
+  make -C build
 }
 
 package() {
-  cd "$srcdir/${Pkgname}-${pkgver}-Source/build"
-  make DESTDIR="$pkgdir" install
+  make -C build DESTDIR="$pkgdir" install
 }
 
