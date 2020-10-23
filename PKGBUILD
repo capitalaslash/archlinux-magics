@@ -4,18 +4,18 @@
 
 pkgname=magics++
 Pkgname=Magics
-pkgver=4.4.0
+pkgver=4.5.0
 _attnum=3473464
 pkgrel=1
 pkgdesc="Magics is the latest generation of the ECMWF's Meteorological plotting software MAGICS."
 arch=('i686' 'x86_64')
 url="https://software.ecmwf.int/wiki/display/MAGP"
 license=('Apache')
-depends=(qt5-base pango eccodes python proj)
+depends=('eccodes>=2.19.0' qt5-base pango proj python)
 optdepends=(libaec odb_api)
-makedepends=(perl-xml-parser gcc-fortran swig cmake boost emos python-jinja)
+makedepends=(cmake gcc-fortran perl-xml-parser python-jinja swig)
 source=(http://software.ecmwf.int/wiki/download/attachments/${_attnum}/${Pkgname}-${pkgver}-Source.tar.gz)
-sha256sums=('544058cd334f3e28a16d00ea7811e13cdf282f9c1ebec2ad7868171d925abd24')
+sha256sums=('d6f5682772ba7012f845b0c37f7bbaf5e12e6e9cf36da7524b234d8dc073ad2c')
 
 build() {
   [ -x /usr/bin/odb ] && has_odb=ON || has_odb=OFF
